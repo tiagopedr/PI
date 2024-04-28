@@ -31,38 +31,38 @@
         </div>
         <div class="d-flex justify-content-end">
           <div class="px-5">
-            <label for="inputName" class="form-label text-primary">Nº Processo </label>
-            <input class="text4" id="inputName" placeholder="00000000" required></textarea>
+            <label for="inputProcess" class="form-label text-primary">Nº Processo </label>
+            <input class="text4" id="inputProcess" placeholder="00000000" required></textarea>
           </div>
         </div>
       </div>
 
       <div class="d-flex justify-content-start">
         <div class="mb+3">
-          <label for="inputName" class="form-label text-primary">Email</label>
-          <input class="text2" id="inputName" placeholder="Informe seu email" required></textarea>
+          <label for="inputMail" class="form-label text-primary">Email</label>
+          <input class="text2" id="inputMail" placeholder="Informe seu email" required></textarea>
         </div>
         <div class="d-flex justify-content-end">
           <div class="px-5">
-            <label for="inputName" class="form-label text-primary">Data Entrada</label>
-            <input class="text5" id="inputName" placeholder="00/00/0000" required></textarea>
+            <label for="inputData" class="form-label text-primary">Data Entrada</label>
+            <input class="text5" id="inputData" placeholder="00/00/0000" required></textarea>
           </div>
         </div>
       </div>
       <div class="d-flex justify-content-start">
         <div class="mb+3">
-          <label for="inputName" class="form-label text-primary">CPF</label>
-          <input class="text3" id="inputName" placeholder="000.000.000-00" required></textarea>
+          <label for="inputCPF" class="form-label text-primary">CPF</label>
+          <input class="text3" id="inputCPF" placeholder="000.000.000-00" required></textarea>
         </div>
         <div class="d-flex justify-content-end">
           <div class="px-5">
-            <label for="inputName" class="form-label text-primary">Departamento</label>
-            <input class="text6" id="inputText" placeholder="Informe o Departamento" required></textarea>
+            <label for="inputDep" class="form-label text-primary">Departamento</label>
+            <input class="text6" id="inputDep" placeholder="Informe o Departamento" required></textarea>
           </div>
         </div>
 
         <div class="d-flex justify-content-start mb-3">
-          <button type="submit" class="btn btn-primary p-3 text-decoration-underline">SALVAR</button>
+          <button id = "submeter" type="submit" class="btn btn-primary p-3 text-decoration-underline">SALVAR</button>
         </div>
       </div>
   </form>
@@ -73,8 +73,50 @@
       </a>
     </ul>
   </nav>
-  <script src=https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js></script>
-  <script src="./main.js></script>
-  
+      <script src = "https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+      <script src = "./main.js"></script>
+      <script type = "module">
+         // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+        import { getDatabase, ref, set, child, get} from "https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js";
+          
+          // Your web app's Firebase configuration
+          const firebaseConfig = {
+            apiKey: "AIzaSyCwQnsy4RGZOV2E6XF5pVZ4496IV39c9s4",
+            authDomain: "piunivesp-e81af.firebaseapp.com",
+            databaseURL: "https://piunivesp-e81af-default-rtdb.firebaseio.com",
+            projectId: "piunivesp-e81af",
+            storageBucket: "piunivesp-e81af.appspot.com",
+            messagingSenderId: "37066626111",
+            appId: "1:37066626111:web:1a6d01533fe00b76ffd48a"
+          };
+
+          // Initialize Firebase
+          const app = initializeApp(firebaseConfig);
+
+          const db = getDatabase(app);
+          
+          document.getElementById("submeter").addEventListener("click", setData);
+          
+          function setData(e){
+              e.preventDefault();
+              set(ref(db, 'Process/' + document.getElementById("inputProcess").value),{
+                entryData: document.getElementById("inputData").value,
+                department: document.getElementById("inputDep").value,
+                userId: {nameUser: document.getElementById("inputName").value,
+                          mailUser: document.getElementById("inputMail").value,
+                            documentUser: document.getElementById("inputCPF").value, }
+                })
+                .then(()=>{
+                alert("Dados gravados com sucesso!");
+                })
+                .catch((error)=>{
+                alert("Falha ao gravar dados");
+                console.log(error);
+                })
+              }
+
+      </script>
+      
    </body>
 </html>

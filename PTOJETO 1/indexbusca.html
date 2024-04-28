@@ -22,20 +22,81 @@
 
     <h3 class="instruçao"><i>Escolha uma das Opções para pesquisar o seu Processo:</i></h3>
     <form class="search-container">
-        <input type="text" id="search-bar" placeholder="Digite o Nº do Processo">
+        <input id="numero" placeholder="Digite o Nº do Processo">
         <a href="#"><img class="search-icon" src="./img/icons8-pesquisar-48.png"></a>
-     </form>  
+        
+     </form>
+     <h2 class="instruçao"><i>Processo encontrado no sistema:</i></h2> 
      <form class="search-container">
-        <input type="text" id="search-bar" placeholder="Digite seu Nome">
-        <a href="#"><img class="search-icon" src="./img/icons8-pesquisar-48.png"></a>
+        <div id="Nome"></div>
+        <div id="Email"></div>
+        <div id="CPF"></div>
+        <div id="Data de Entrada"></div>
+        <div id="Departamento"></div>
+        
      </form> 
-     <form class="search-container">
-        <input type="text" id="search-bar" placeholder="Digite o seu CPF">
-        <a href="#"><img class="search-icon" src="./img/icons8-pesquisar-48.png"></a>
-     </form> 
-
+    
      <a href="./index.html">
         <li class="text-center mb-5 ">RETORNAR</li>
       </a>
+
+      <script type = "module">
+        // Import the functions you need from the SDKs you need
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+            import { getDatabase, ref, set, child, get} from "https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js";
+                             
+                // Your web app's Firebase configuration
+                const firebaseConfig = {
+                    apiKey: "AIzaSyCwQnsy4RGZOV2E6XF5pVZ4496IV39c9s4",
+                    authDomain: "piunivesp-e81af.firebaseapp.com",
+                    databaseURL: "https://piunivesp-e81af-default-rtdb.firebaseio.com",
+                    projectId: "piunivesp-e81af",
+                    storageBucket: "piunivesp-e81af.appspot.com",
+                    messagingSenderId: "37066626111",
+                    appId: "1:37066626111:web:1a6d01533fe00b76ffd48a"
+                        };
+                   
+                // Initialize Firebase
+                const app = initializeApp(firebaseConfig);
+                   
+                const db = getDatabase(app);
+
+                var nome = document.getElementById("Nome");
+                var email = document.getElementById("Email");
+                var cpf = document.getElementById("CPF");
+                var data = document.getElementById("Data de Entrada");
+                var dep = document.getElementById("Departamento");
+                
+                const dbRef = ref(db);
+                              
+
+                document.getElementById("numero").onkeypress = function(e) {
+                        // 13 é a tecla <ENTER>. Se ela for pressionada, mostrar o valor
+                        if (e.keyCode == 13) {
+                            get(child(dbRef, 'Process/' + document.getElementById("numero").value)).then((snapshot)=>{
+                            if(snapshot.exists()){
+                            dep.innerHTML = snapshot.val().department;
+                            data.innerHTML = snapshot.val().entryData;
+
+
+                        }}) 
+                        e.preventDefault();
+
+                        get(child(dbRef, 'Process/' + document.getElementById("numero").value + "/userId")).then((snapshot)=>{
+                            if(snapshot.exists()){
+                                nome.innerHTML = snapshot.val().nameUser;
+                                email.innerHTML = snapshot.val().mailUser;
+                                cpf.innerHTML = snapshot.val().documentUser;
+
+
+                        }}) 
+                        
+                        }
+                    }
+        
+                          
+                
+                             
+    </script>
 </body>
     </html>
