@@ -70,29 +70,32 @@
                 const dbRef = ref(db);
                               
 
-                document.getElementById("numero").onkeypress = function(e) {
-                        // 13 é a tecla <ENTER>. Se ela for pressionada, mostrar o valor
-                        if (e.keyCode == 13) {
-                            get(child(dbRef, 'Process/' + document.getElementById("numero").value)).then((snapshot)=>{
-                            if(snapshot.exists()){
-                            dep.innerHTML = snapshot.val().department;
-                            data.innerHTML = snapshot.val().entryData;
-
-
-                        }}) 
-                        e.preventDefault();
-
-                        get(child(dbRef, 'Process/' + document.getElementById("numero").value + "/userId")).then((snapshot)=>{
-                            if(snapshot.exists()){
+                document.getElementById("numero").onkeydown = function(e) {
+                    // Verifica se a tecla pressionada é o "Enter" (código 13)
+                    if (e.keyCode === 13) {
+                        e.preventDefault(); // Impede o comportamento padrão do formulário
+                
+                        const processNumber = document.getElementById("numero").value;
+                
+                        // Consulta o banco de dados para obter os dados do processo
+                        get(child(dbRef, 'Process/' + processNumber)).then((snapshot) => {
+                            if (snapshot.exists()) {
+                                dep.innerHTML = snapshot.val().department;
+                                data.innerHTML = snapshot.val().entryData;
+                            }
+                        });
+                
+                        // Consulta o banco de dados para obter os dados do usuário associado ao processo
+                        get(child(dbRef, 'Process/' + processNumber + "/userId")).then((snapshot) => {
+                            if (snapshot.exists()) {
                                 nome.innerHTML = snapshot.val().nameUser;
                                 email.innerHTML = snapshot.val().mailUser;
                                 cpf.innerHTML = snapshot.val().documentUser;
-
-
-                        }}) 
-                        
-                        }
+                            }
+                        });
                     }
+                };
+
         
                           
                 
