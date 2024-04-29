@@ -125,6 +125,31 @@
                         </tr>
                     </tbody>
                     </table>
+                        // Importe as funções necessárias do Firebase
+                    import { collection, query, where, getDocs } from "firebase/firestore";
+                    
+                    // Referência à coleção "processos"
+                    const processosRef = collection(db, "processos");
+                    
+                    // Calcula a data atual + 4 dias
+                    const hoje = new Date();
+                    const prazoMaximo = new Date(hoje);
+                    prazoMaximo.setDate(prazoMaximo.getDate() + 4);
+                    
+                    // Consulta para buscar os processos com prazo de entrega nos próximos 4 dias
+                    const q = query(processosRef, where("prazo", "<=", prazoMaximo));
+                    
+                    // Execute a consulta e obtenha os resultados
+                    getDocs(q).then((querySnapshot) => {
+                        querySnapshot.forEach((doc) => {
+                            const processo = doc.data();
+                            // Preencha as células da tabela com os dados do processo
+                            // Por exemplo:
+                            document.getElementById("celula").textContent = processo.numeroProcesso;
+                            // ...
+                        });
+                    });
+
 
 </body>
 
